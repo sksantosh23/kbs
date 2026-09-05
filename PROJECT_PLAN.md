@@ -504,6 +504,8 @@ flowchart TD
 
 The lead Orchestrator owns understanding/preservation of authoritative business and product requirements, decomposition into non-overlapping tasks, the dependency graph, assignment/reassignment, maximum safe parallelism, task-specific agent education, overlap/conflict prevention, shared contracts, handoff review, integration, tests and cross-functional review, traceability, material human escalation and synchronized documentation. Delegating implementation does not delegate final acceptance or release accountability.
 
+The Ops/QA specialist is additionally designated the **Repository / DevOps Custodian**. This is a single accountable repository-integrity role, separate from application-feature ownership. It monitors Git status, tracked/untracked/ignored files, branch/worktree divergence, conflicts, secret and prohibited Government-data checks, logical commits and remote parity; coordinates shared-file changes with the Orchestrator; and reports REPOSITORY/SYNC/UNTRACKED/IGNORED/SECRETS/CONFLICTS/ACTION evidence at checkpoints. GitHub synchronization is a completion and release prerequisite, while missing authentication is recorded as GH-001 and does not stop unrelated safe work.
+
 Specialists may make safe, reversible, justified engineering choices within their assigned boundary. They must not change scope, invent requirements, modify another owner's area without coordination, redefine shared contracts independently, introduce unjustified dependencies, claim completion without evidence, duplicate assigned work or treat a missing input as permission to guess business intent. They consult the authoritative source when the task packet is insufficient. Dependency proposals must identify purpose, existing alternatives, maintenance/license/security/runtime cost and affected contracts; coordinate shared manifest/lockfile changes through their owner.
 
 Activate the minimum useful combination from this pool: Product/Requirements/Traceability; UX/Information Architecture; Design System/UI; Web/Astro Frontend; Backend/Domain/API; Database/Persistence; Security/Privacy; QA/Test Automation; Accessibility/Performance; DevOps/Release; Content/Government disclosure review. A specialist role is not a standing process or permanent one-role agent. One agent may handle cohesive related work; reviewers receive explicit bounded read-only scopes unless assigned remediation ownership.
@@ -542,6 +544,7 @@ Before parallel implementation, name exactly **one primary owning agent per task
 | Shared configuration, package manifest/lockfile and build/deploy settings | Foundation/DevOps specialist | All implementation/test tasks |
 | Restricted Government capability schema/public approval boundary | Backend owner for contracts; separately owned content review records | Publication and disclosure tests; no restricted data in public tasks |
 | Project registers, task graph, integration and traceability coordination | Orchestrator | All handoffs/reviews |
+| Repository/workspace integrity, Git hygiene and GitHub synchronization | Repository / DevOps Custodian (Ops/QA specialist) | All integrated work; Orchestrator remains merge/integration authority |
 
 If two surfaces share an actual file, designate one file owner and serialize the other task's requested edits. A specialist requests out-of-boundary changes through the Orchestrator, explaining need, affected contract/paths and tests. The Orchestrator assigns the change to the current owner or performs an explicit ownership transfer before editing. Review authority does not imply write authority.
 
@@ -720,11 +723,11 @@ No new product or governance conflict is introduced. Q03 resolves the partner ma
 
 Completed: all source documents read, every existing workspace item inventoried, functional and non-functional requirements traced, proposed architecture/data/security/testing/deployment outlined, conflicts and material decisions documented. The original source documents are preserved. Only PROJECT_PLAN.md is created for this phase.
 
-Version 1.2 changes only this plan: adds Orchestrator/specialist delivery governance, single-owner task packets, interface-first parallelism, integration controls and four dashboard schemas; absorbs the approved partner minimum-data decision and closes Q03. Version 1.1 routing/status, production gates, architecture boundaries, idempotency and security verification remain intact. No implementation authorization is inferred.
+Version 1.3 adds the dedicated Repository / DevOps Custodian role, continuous GitHub synchronization controls, reproducibility and secret-file hygiene requirements, and the GH-001 authentication blocker. Version 1.2 added Orchestrator/specialist delivery governance, single-owner task packets, interface-first parallelism, integration controls and four dashboard schemas; it absorbed the approved partner minimum-data decision and closed Q03. Version 1.1 routing/status, production gates, architecture boundaries, idempotency and security verification remain intact. Implementation is authorized by the user's 2026-09-05 instruction; production gates remain open.
 
 Verification in this phase is limited to document reading, inventory, requirement-ID coverage and source fingerprint comparison. No application code, installs, application tests, security scans, performance measurements or deployments were performed. The plan is ready for review; the product is not claimed implemented or production-ready.
 
-**STOP: Do not begin implementation until the user explicitly approves the plan.**
+Implementation is active under the approved plan. The next implementation checkpoint remains subject to repository parity verification when GitHub authentication is available.
 
 ## Appendix A. Explicit functional requirement register
 
