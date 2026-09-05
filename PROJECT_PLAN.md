@@ -1,7 +1,7 @@
 # Kora Business Solutions — Project Plan
 
 **Status:** ACTIVE — approved for implementation on 2026-09-05  
-**Version:** 1.2  
+**Version:** 1.3
 **Date:** 2026-09-05  
 **Scope:** Approved Release 1 implementation and release-readiness  
 **Authority:** The three supplied specifications remain authoritative. This plan is a derived proposal, not an amendment or approval of the draft PRD. Explicit user approval is required before implementation.
@@ -11,6 +11,8 @@
 On 2026-09-05 the user explicitly approved this plan, the Orchestrator/specialist model and PD-001, and instructed implementation through integration/testing/review/readiness. Q01 and Q03 are CLOSED. Historical Phase 1 stop statements below describe prior gates and are superseded by this authorization, not deleted as if approval existed earlier.
 
 The four continuously maintained dashboards now have one canonical location each: [Human Decisions](docs/HUMAN_DECISIONS.md), [Risk Register](docs/RISK_REGISTER.md), [Technical Register](docs/TECHNICAL_REGISTER.md), [Lean Register](docs/LEAN_REGISTER.md). §15.5 retains governance schemas and historical initial records only; do not update a competing dashboard here. Current ownership/contracts: [Architecture](docs/ARCHITECTURE.md). Production Q05/Q06/Q07/Q10 remain open and do not block implementation.
+
+Repository governance is a first-class delivery responsibility. The Orchestrator designates the Ops/QA specialist as the **Repository / DevOps Custodian** (single accountable owner for Git/workspace integrity and GitHub synchronization; no application-feature ownership). The Custodian continuously checks branch state, tracked/untracked/ignored files, conflicts, secret and prohibited-data hygiene, and remote divergence; uses isolated branches/worktrees where practical; coordinates shared-file integration with the Orchestrator; makes logical cohesive commits; and verifies GitHub synchronization at every integration checkpoint. A completed item cannot enter COMPLETE while verified commits remain only local. Secret-bearing environment files and runtime databases remain ignored; safe templates and reproducibility documentation are committed. The Orchestrator remains the integration authority and owns register meaning.
 
 ## 1. Executive summary
 
