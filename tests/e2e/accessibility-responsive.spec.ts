@@ -12,6 +12,14 @@ test.describe('public accessibility and responsive release checks', () => {
     });
   }
 
+  test('public routes load first-party scripts without browser errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+    page.on('pageerror', error => errors.push(error.message));
+    for (const route of publicRoutes) await page.goto(route);
+    expect(errors).toEqual([]);
+  });
+
   for (const viewport of [{ name: 'mobile', width: 375, height: 812 }, { name: 'tablet', width: 768, height: 1024 }, { name: 'desktop', width: 1440, height: 900 }]) {
     test(`${viewport.name} layout reflows without horizontal overflow`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
