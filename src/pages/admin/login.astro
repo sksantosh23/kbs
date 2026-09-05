@@ -1,13 +1,16 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { getDb } from '../../server/database';
-import { verifyPassword, createSession } from '../../server/auth';
+import { verifyPassword, createSession, consumeRateLimit } from '../../server/auth';
+import { createHash } from 'node:crypto';
 export const prerender = false;
 let error = '';
 if (Astro.request.method === 'POST') {
   const body = await Astro.request.formData(); const username=String(body.get('username')||''); const password=String(body.get('password')||'');
-  const row=getDb().prepare('SELECT * FROM admins WHERE username=? AND active=1').get(username) as any;
-  if(row && await verifyPassword(password,row.password_hash)) { const session=createSession(row.id); Astro.cookies.set('kora_session',session.token,{httpOnly:true,secure:import.meta.env.PROD,sameSite:'lax',path:'/',maxAge:28800}); Astro.cookies.set('kora_csrf',session.csrf,{httpOnly:false,secure:import.meta.env.PROD,sameSite:'lax',path:'/',maxAge:28800}); return Astro.redirect('/admin/inquiries'); }
+  const bucket=createHash('sha256').update(`login|${username.toLowerCase()}|${Astro.clientAddress||'unknown'}`).digest('hex').slice(0,24);
+  const allowed=consumeRateLimit(bucket);
+  const row=allowed ? getDb().prepare('SELECT * FROM admins WHERE username=? AND active=1').get(username) as any : null;
+  if(allowed && row && await verifyPassword(password,row.password_hash)) { const session=createSession(row.id); Astro.cookies.set('kora_session',session.token,{httpOnly:true,secure:import.meta.env.PROD,sameSite:'lax',path:'/',maxAge:28800}); Astro.cookies.set('kora_csrf',session.csrf,{httpOnly:false,secure:import.meta.env.PROD,sameSite:'lax',path:'/',maxAge:28800}); return Astro.redirect('/admin/inquiries'); }
   error='Sign-in could not be completed.';
 }
 ---

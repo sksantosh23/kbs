@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { deriveQueue, validateInquiry, canTransition, type Status } from '../domain/inquiry';
 import { getDb } from '../server/database';
+import { consumeRateLimit } from '../server/auth';
 export function hashPayload(input: Record<string,unknown>) { return createHash('sha256').update(JSON.stringify(input, Object.keys(input).sort())).digest('hex'); }
 export function submitInquiry(input: Record<string,unknown>, attemptToken: string, browserHash = 'anonymous') {
   const result=validateInquiry(input); if(!result.ok) return {ok:false as const, errors:result.errors};
@@ -10,13 +11,8 @@ export function submitInquiry(input: Record<string,unknown>, attemptToken: strin
   if(existing?.payload_hash && existing.payload_hash!==payloadHash) return {ok:false as const, conflict:true, errors:{form:'This submission attempt was changed. Start again.'}};
   if(existing?.inquiry_id && existing.public_reference) return {ok:true as const, publicReference:existing.public_reference, duplicate:true};
   const queue=deriveQueue(result.value); const id=randomBytes(16).toString('hex'); const reference=`KORA-${randomBytes(8).toString('hex').toUpperCase()}`;
+  if (!consumeRateLimit(`inquiry:${browserHash}`)) return {ok:false as const, rateLimited:true, errors:{form:'Too many requests. Wait a few minutes and try again.'}};
   db.exec('BEGIN IMMEDIATE'); try {
-    const bucket = `inquiry:${browserHash}`;
-    const limit = db.prepare('SELECT count,expires_at FROM rate_limits WHERE bucket=?').get(bucket) as any;
-    const window = 15 * 60 * 1000;
-    if (limit && limit.expires_at > now && limit.count >= 5) { db.exec('ROLLBACK'); return {ok:false as const, rateLimited:true, errors:{form:'Too many requests. Wait a few minutes and try again.'}}; }
-    if (!limit || limit.expires_at <= now) db.prepare('INSERT INTO rate_limits(bucket,count,expires_at) VALUES(?,?,?) ON CONFLICT(bucket) DO UPDATE SET count=excluded.count,expires_at=excluded.expires_at').run(bucket,1,now+window);
-    else db.prepare('UPDATE rate_limits SET count=count+1 WHERE bucket=?').run(bucket);
     db.prepare('INSERT OR IGNORE INTO attempts(token_hash,browser_hash,created_at,expires_at,payload_hash) VALUES(?,?,?,?,?)').run(tokenHash,browserHash,now,now+48*60*60*1000,payloadHash);
     const attempt=db.prepare('SELECT inquiry_id,payload_hash,retired FROM attempts WHERE token_hash=?').get(tokenHash) as any;
     if(attempt?.inquiry_id) { const row=db.prepare('SELECT public_reference FROM inquiries WHERE id=?').get(attempt.inquiry_id) as any; db.exec('COMMIT'); return row ? {ok:true as const,publicReference:row.public_reference,duplicate:true} : {ok:false as const,errors:{form:'This submission has expired. Start again.'}}; }
