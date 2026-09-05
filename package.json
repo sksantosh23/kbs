@@ -7,7 +7,7 @@
     "node": ">=24.0.0 <25"
   },
   "scripts": {
-    "dev": "astro dev --host 127.0.0.1",
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "start": "node dist/server/entry.mjs",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
