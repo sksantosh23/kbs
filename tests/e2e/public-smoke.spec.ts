@@ -9,8 +9,8 @@ test('public homepage provides the primary requirement path', async ({ page }) =
 
 test('request form exposes the approved minimum contact fields', async ({ page }) => {
   await page.goto('/request?type=teaming');
-  await expect(page.getByRole('heading', { name: /Start a requirement/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Describe what needs to move/i })).toBeVisible();
   await expect(page.getByLabel(/Contact name/i)).toBeVisible();
   await expect(page.getByLabel(/Email/i)).toBeVisible();
-  await expect(page.getByLabel(/capability|partnership summary/i)).toBeVisible();
+  await expect(page.getByLabel(/Requirement summary \/ message/i)).toBeVisible();
 });
