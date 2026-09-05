@@ -6,6 +6,7 @@ export function submitInquiry(input: Record<string,unknown>, attemptToken: strin
   const result=validateInquiry(input); if(!result.ok) return {ok:false as const, errors:result.errors};
   const db=getDb(); const tokenHash=createHash('sha256').update(attemptToken).digest('hex'); const payloadHash=hashPayload(input); const now=Date.now();
   const existing=db.prepare('SELECT a.*,i.public_reference FROM attempts a LEFT JOIN inquiries i ON i.id=a.inquiry_id WHERE a.token_hash=?').get(tokenHash) as any;
+  if(existing?.retired) return {ok:false as const, errors:{form:'This submission has expired. Start again.'}};
   if(existing?.payload_hash && existing.payload_hash!==payloadHash) return {ok:false as const, conflict:true, errors:{form:'This submission attempt was changed. Start again.'}};
   if(existing?.inquiry_id && existing.public_reference) return {ok:true as const, publicReference:existing.public_reference, duplicate:true};
   const queue=deriveQueue(result.value); const id=randomBytes(16).toString('hex'); const reference=`KORA-${randomBytes(8).toString('hex').toUpperCase()}`;
