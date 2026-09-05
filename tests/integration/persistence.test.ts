@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { getDb, openDatabase, resetDbForTests } from '../../src/server/database';
-import { submitInquiry } from '../../src/application/inquiries';
+import { listInquiries, submitInquiry } from '../../src/application/inquiries';
 
 describe('first-party SQLite schema and receipt persistence', () => {
   let dir: string;
@@ -33,5 +33,15 @@ describe('first-party SQLite schema and receipt persistence', () => {
     const retry = submitInquiry(input, attempt);
     expect(retry.ok).toBe(false);
     if (!retry.ok) expect(retry.errors.form).toMatch(/expired/i);
+  });
+
+  it('filters the private inbox by queue, status and bounded text search', () => {
+    process.env.KORA_DB_PATH = join(dir, 'kora.sqlite');
+    resetDbForTests();
+    submitInquiry({ type: 'GENERAL', contact_name: 'Alpha Contact', email: 'alpha@example.test', details: 'Alpha request.' }, 'attempt-filter-alpha-123456789');
+    submitInquiry({ type: 'PRODUCT', contact_name: 'Beta Contact', email: 'beta@example.test', subject: 'Beta sourcing', details: 'Beta request.' }, 'attempt-filter-beta-123456789');
+    expect(listInquiries({ q: 'alpha' })).toHaveLength(1);
+    expect(listInquiries({ routing_queue: 'PROCUREMENT', status: 'NEW' })).toHaveLength(1);
+    expect(listInquiries({ q: 'example.test', type: 'GENERAL' })).toHaveLength(1);
   });
 });
