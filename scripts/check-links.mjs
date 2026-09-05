@@ -23,12 +23,12 @@ export async function checkLinks(root, { origin = 'https://kora.invalid', allowD
       if (url.origin !== origin) continue;
       let pathname;
       try { pathname = decodeURIComponent(url.pathname); } catch { findings.push({ path, link, rule: 'invalid-encoding' }); continue; }
-      if (allowDynamic.some(pattern => pattern.test(pathname))) continue;
       const target = resolve(root, '.' + pathname);
       if (!target.startsWith(root + '/') && target !== root) { findings.push({ path, link, rule: 'invalid-path' }); continue; }
       const candidates = [target, resolve(target, 'index.html'), target + '.html'];
       let found;
       for (const candidate of candidates) { try { if ((await stat(candidate)).isFile()) { found = candidate; break; } } catch {} }
+      if (!found && allowDynamic.some(pattern => pattern.test(pathname))) continue;
       if (!found) findings.push({ path, link, rule: 'missing-target' });
       else if (url.hash && found.endsWith('.html')) {
         const html = await readFile(found, 'utf8');
