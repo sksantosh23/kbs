@@ -1,0 +1,4 @@
+import type { APIRoute } from 'astro';
+export const prerender = true;
+const routes=['/','/what-we-do','/what-we-do/sourcing-procurement','/what-we-do/supply-distribution','/what-we-do/medical-invasive-technologies','/what-we-do/iot-connected-systems','/what-we-do/business-services','/what-we-do/technology-enablement','/what-we-do/logistics-trade','/products','/government','/government/contracting','/partners','/partners/suppliers','/partners/teaming','/about','/insights','/contact','/request','/privacy','/accessibility'];
+export const GET: APIRoute = ({site}) => { const origin=site?.toString()||'https://kora.invalid/'; return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes.map(route=>`<url><loc>${new URL(route,origin).toString()}</loc></url>`).join('')}</urlset>`,{headers:{'content-type':'application/xml'}}); };

@@ -1,0 +1,6 @@
+---
+interface Props { large?: boolean }
+const { large = false } = Astro.props;
+---
+<span class:list={['brand', { 'brand-large': large }]}><svg class="brand-symbol" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M3 3h9v14L27 3h12L21 20l18 17H27L12 23v14H3V3Z" fill="currentColor"/></svg><span class="brand-name">KORA<span class="brand-descriptor">BUSINESS SOLUTIONS</span></span></span>
+<style>.brand{display:inline-flex;gap:10px;align-items:center}.brand-symbol{width:34px;height:34px;color:var(--signal);flex-shrink:0}.brand-name{font-size:30px;font-weight:700;line-height:.9;letter-spacing:-1.5px}.brand-descriptor{display:block;font-size:7px;letter-spacing:1.7px;margin-top:7px;font-weight:500}.brand-large .brand-name{font-size:48px}.brand-large .brand-symbol{width:53px;height:53px}.brand-large .brand-descriptor{font-size:9px;letter-spacing:3px}</style>

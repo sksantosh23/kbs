@@ -1,0 +1,37 @@
+{
+  "name": "kora-business-solutions",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "start": "node dist/server/entry.mjs",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "verify:public": "node scripts/verify-public.mjs",
+    "verify:links": "node scripts/check-links.mjs",
+    "admin": "node --experimental-strip-types scripts/admin.ts",
+    "backup": "node --experimental-strip-types scripts/backup.ts",
+    "retention": "node --experimental-strip-types scripts/retention.ts",
+    "release:check": "node scripts/release-check.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.5",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.1",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.4.1",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.0"
+  }
+}

@@ -1,0 +1,13 @@
+# Lean Register
+
+Updated 2026-09-05. One primary owner per card. Tasks remain WIP through integration, tests, review and documentation. Exactly three delivery columns.
+
+| TO DO | WIP | COMPLETE |
+|---|---|---|
+| T-RELEASE: readiness review; owner Orchestrator; depends all integrated tasks; requirements P §40; acceptance all release gates evidenced or explicitly blocked; verification build/tests/security/restore; blocker production Q05/06/07/10 | T-FOUNDATION: stack/shared config/contracts; owner Orchestrator; P §28/29, F-003/012; acceptance reproducible build and separated layers; tests type/build; blocker none | — |
+| T-E2E: all critical browser flows, accessibility/mobile/performance; owner Orchestrator pending reassignment; depends integrated app; P §39; acceptance functional/accessibility evidence; verification Playwright/axe/performance; blocker app not integrated | T-DOMAIN: schema/routing/status; owner domain; F-003/007/010, BR-029; deps agreed §5 contracts; acceptance all 11 types and deterministic rules; Vitest; blocker none | — |
+| — | T-PUBLIC: public pages/design system; owner public_ui; F-001/002/004/005/006/008/009/011/014/015; deps SiteLayout contract; acceptance routes accessible/responsive and approval metadata; build/link/browser review; blocker production copy only | — |
+| — | T-OPSQA: disclosure/link checks, deployment/runbooks; owner ops_qa; SEC-013, REL, P §39/40; deps artifact paths agreed; acceptance negative fixtures and accurate runbooks; script/security tests; blocker none | — |
+| — | T-INTAKE-ADMIN: HTTP/application/persistence/auth/form/admin; owner Orchestrator; F-003/007/010/012; deps domain contract; acceptance persistent duplicate-safe intake and secure operations; integration/E2E/security tests; blocker none | — |
+
+Packets: task scope and actual ownership in docs/ARCHITECTURE.md; acceptance extends to applicable security/accessibility/responsive/performance/regression review, integration and traceability. Agent reports alone do not qualify as COMPLETE.

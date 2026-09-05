@@ -1,0 +1,5 @@
+---
+interface Props { eyebrow: string; title: string; description?: string; parent?: { label: string; href: string }; }
+const {eyebrow,title,description,parent} = Astro.props;
+---
+<section class="page-hero wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span>{parent && <><a href={parent.href}>{parent.label}</a><span aria-hidden="true">/</span></>}<span aria-current="page">{eyebrow}</span></nav><div class="eyebrow section-label"><span class="signal-dot"></span>{eyebrow}</div><h1>{title}</h1>{description && <p class="intro">{description}</p>}<slot /></section>

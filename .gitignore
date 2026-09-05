@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.env*
+!.env.example
+var/
+playwright-report/
+test-results/
+coverage/
+*.sqlite*

@@ -1,0 +1,3 @@
+import { getDb } from '../src/server/database.ts';
+if (process.env.KORA_RETENTION_APPROVED !== '1') throw new Error('Retention policy is not approved; set KORA_RETENTION_APPROVED=1 after production approval.');
+const db=getDb(); const now=Date.now(); db.exec('BEGIN IMMEDIATE'); try { const rows=db.prepare("SELECT id FROM inquiries WHERE retention_until IS NOT NULL AND retention_until<=? OR status='SPAM' AND updated_at<=?").all(now,now-30*24*60*60*1000) as any[]; for(const row of rows){db.prepare('UPDATE attempts SET retired=1 WHERE inquiry_id=?').run(row.id); db.prepare('DELETE FROM inquiries WHERE id=?').run(row.id);} db.exec('COMMIT'); console.log(`Purged ${rows.length} inquiries.`); } catch(e){try{db.exec('ROLLBACK')}catch{};throw e}

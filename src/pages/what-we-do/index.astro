@@ -1,0 +1,8 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import PreviewNotice from '../../components/PreviewNotice.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import {capabilities} from '../../content/site';
+---
+<SiteLayout title="What We Do"><PageHero eyebrow="What We Do" title="Different capabilities. One connected approach." description="Source. Supply. Enable. Operate. Move. Connect. Start with the outcome you need, then explore the capabilities around it."/><section class="section section-stone"><div class="wrap"><PreviewNotice/><div class="capability-list">{capabilities.map((item,index) => <a class="capability-row" href={`/what-we-do/${item.slug}`}><span class="number">0{index+1} /</span><h3>{item.title}</h3><p>{item.description}</p><span class="arrow" aria-hidden="true">↗</span></a>)}</div><div class="actions"><a class="text-link" href="/products">Explore sourcing categories ↗</a><a class="text-link" href="/partners">Explore partnerships ↗</a><a class="text-link" href="/government">Government & Public Sector ↗</a></div></div></section><FinalCTA/></SiteLayout>

@@ -1,0 +1,5 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { contacts } from '../../content/site';
+---
+<SiteLayout title="Government Contracting"><section class="section"><div class="wrap reading"><p class="eyebrow">GOVERNMENT / CONTRACTING</p><h1>Engage around the acquisition path.</h1><p>Use the Government requirement flow for a solicitation or opportunity summary. The form supports RFQ, RFP, RFI, RFC, fixed-price/FFP, contract, subcontracting and teaming contexts.</p><div class="actions"><a class="button" href="/request?type=government">Submit Government Requirement ↗</a><a class="button button-outline" href="/partners/teaming">Teaming partners</a></div><h2>Direct pathways</h2><p><a href={`mailto:${contacts.procurement}`}>Procurement: {contacts.procurement}</a><br/><a href={`mailto:${contacts.contracts}`}>Contracts: {contacts.contracts}</a></p></div></section></SiteLayout>

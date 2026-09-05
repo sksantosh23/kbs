@@ -1,0 +1,5 @@
+---
+interface Props { title?: string; href?: string; label?: string; }
+const {title = 'Every outcome starts with a requirement.', href = '/request', label = 'Start a Requirement'} = Astro.props;
+---
+<section class="final-cta"><div class="wrap final-inner"><div><p class="eyebrow">LET’S CONNECT THE DOTS</p><h2>{title}</h2></div><a class="button button-ink" href={href}>{label}<span aria-hidden="true">↗</span></a></div></section>

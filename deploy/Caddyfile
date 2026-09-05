@@ -1,0 +1,32 @@
+# SITE_HOST is the approved canonical hostname, without scheme.
+{$SITE_HOST} {
+	root * /srv/kora/client
+	encode zstd gzip
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Strict-Transport-Security "max-age=31536000"
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+	}
+	# No access log: search query strings, IP addresses and form URLs can be personal.
+	# Protected and mutation routes always reach application authorization.
+	@private path /admin /admin/* /api/*
+	handle @private {
+		header Cache-Control "private, no-store"
+		header X-Robots-Tag "noindex, nofollow"
+		reverse_proxy app:4321
+	}
+	@static {
+		method GET HEAD
+		file {path} {path}/index.html
+	}
+	handle @static {
+		rewrite * {file_match.relative}
+		file_server
+	}
+	handle {
+		reverse_proxy app:4321
+	}
+}
