@@ -3,7 +3,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import { inquiryTypes, typeLabels } from '../domain/inquiry';
 import { randomBytes } from 'node:crypto';
 const type = Astro.url.searchParams.get('type') || '';
-const selected = ({product:'PRODUCT',medical:'MEDICAL_TECHNOLOGY',iot:'IOT_CONNECTED_SYSTEMS',government:'GOVERNMENT'} as Record<string,string>)[type] || type;
+const selected = ({product:'PRODUCT',medical:'MEDICAL_TECHNOLOGY',iot:'IOT_CONNECTED_SYSTEMS',government:'GOVERNMENT',supplier:'SUPPLIER',teaming:'TEAMING',service:'SERVICE',logistics:'LOGISTICS',technology:'TECHNOLOGY',other:'OTHER'} as Record<string,string>)[type] || type.toUpperCase();
 const attempt = randomBytes(24).toString('base64url');
 const startedAt = Date.now();
 const submitted = Astro.url.searchParams.get('submitted');
