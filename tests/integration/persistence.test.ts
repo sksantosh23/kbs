@@ -44,4 +44,17 @@ describe('first-party SQLite schema and receipt persistence', () => {
     expect(listInquiries({ routing_queue: 'PROCUREMENT', status: 'NEW' })).toHaveLength(1);
     expect(listInquiries({ q: 'example.test', type: 'GENERAL' })).toHaveLength(1);
   });
+
+  it('applies a bounded server-side rate limit after idempotent retry checks', () => {
+    process.env.KORA_DB_PATH = join(dir, 'kora.sqlite');
+    resetDbForTests();
+    const browser = 'synthetic-browser-rate-limit';
+    for (let i = 0; i < 5; i++) {
+      const result = submitInquiry({ type: 'GENERAL', contact_name: `Test ${i}`, email: `test${i}@example.test`, details: 'A bounded synthetic inquiry.' }, `attempt-rate-limit-${i}-123456789`, browser);
+      expect(result.ok).toBe(true);
+    }
+    const blocked = submitInquiry({ type: 'GENERAL', contact_name: 'Blocked', email: 'blocked@example.test', details: 'A bounded synthetic inquiry.' }, 'attempt-rate-limit-blocked-123456789', browser);
+    expect(blocked.ok).toBe(false);
+    if (!blocked.ok) expect(blocked.rateLimited).toBe(true);
+  });
 });
