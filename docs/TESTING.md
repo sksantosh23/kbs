@@ -10,6 +10,14 @@ node scripts/verify-public.mjs dist/client
 node scripts/check-links.mjs dist/client
 ```
 
+Operational CLI smoke verification:
+
+```sh
+npm run verify:ops
+```
+
+This executes admin create/update/session invalidation/invalid username checks and isolated backup/retention checks against temporary SQLite state.
+
 `tests/security/public-artifacts.test.mjs` exercises warning false positives, prohibited properties/associated identifiers, escaped keys, explicitly supplied synthetic values, all textual artifact surfaces plus downloads, report non-disclosure, opaque-file review/hash invalidation, links/queries/fragments and missing/placeholder links. On 2026-09-05, Node v24.20.0 directly executed this suite: six tests passed. This is synthetic utility evidence only; built site checks must run against the final integrated build. See SECURITY.md for optional restricted comparison and opaque artifact reviews.
 
 The link checker reads built HTML `href`, `src`, and `action`; resolves static files/routes and fragment IDs; rejects empty/placeholder links. Its narrow dynamic allowlist corresponds to `/request`, `/contact`, `/partners/suppliers`, `/partners/teaming`, `/api/inquiries`, `/admin/login`, `/admin/logout`, `/admin/export`, `/admin/inquiries`, `/admin/inquiries/[id]`, `/health`. These are runtime targets, not proof that handlers work. Query aliases, runtime status codes, sitemap/SEO uniqueness, CSS URLs, srcset and JavaScript-generated links require separate integration/browser/content checks. Absolute same-origin links require `SITE_URL` to match the actual build origin.

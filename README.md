@@ -13,6 +13,7 @@ npm test
 npm run check
 npm run build
 npm run release:check
+npm run verify:ops
 ```
 
 Playwright smoke tests use `playwright.config.ts` and require an authorized runner with Chromium system libraries:

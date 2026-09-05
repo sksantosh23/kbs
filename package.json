@@ -18,6 +18,7 @@
     "admin": "node --experimental-strip-types scripts/admin.ts",
     "backup": "node --experimental-strip-types scripts/backup.ts",
     "retention": "node --experimental-strip-types scripts/retention.ts",
+    "verify:ops": "node --experimental-strip-types --test tests/operations/cli.test.mjs",
     "release:check": "node scripts/release-check.mjs"
   },
   "dependencies": {

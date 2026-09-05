@@ -1,6 +1,6 @@
 import { randomBytes, scrypt as scryptCallback, timingSafeEqual, createHash } from 'node:crypto';
 import { promisify } from 'node:util';
-import { getDb } from './database';
+import { getDb } from './database.ts';
 const scrypt = promisify(scryptCallback);
 export async function hashPassword(password: string): Promise<string> {
   if (!password || password.length < 12) throw new Error('Password must be at least 12 characters.');

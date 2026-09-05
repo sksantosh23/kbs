@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
-import { deriveQueue, validateInquiry, canTransition, type Status } from '../domain/inquiry';
-import { getDb } from '../server/database';
-import { consumeRateLimit } from '../server/auth';
+import { deriveQueue, validateInquiry, canTransition, type Status } from '../domain/inquiry.ts';
+import { getDb } from '../server/database.ts';
+import { consumeRateLimit } from '../server/auth.ts';
 export function hashPayload(input: Record<string,unknown>) { return createHash('sha256').update(JSON.stringify(input, Object.keys(input).sort())).digest('hex'); }
 export function submitInquiry(input: Record<string,unknown>, attemptToken: string, browserHash = 'anonymous') {
   const result=validateInquiry(input); if(!result.ok) return {ok:false as const, errors:result.errors};
