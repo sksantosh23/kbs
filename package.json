@@ -14,6 +14,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "verify:public": "node scripts/verify-public.mjs",
+    "verify:brand": "node scripts/verify-brand.mjs",
     "verify:links": "node scripts/check-links.mjs",
     "admin": "node --experimental-strip-types scripts/admin.ts",
     "backup": "node --experimental-strip-types scripts/backup.ts",

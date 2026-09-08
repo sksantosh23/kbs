@@ -16,6 +16,12 @@ Operational CLI smoke verification:
 npm run verify:ops
 ```
 
+Brand and legacy-token verification:
+
+```sh
+npm run verify:brand
+```
+
 This executes admin create/update/session invalidation/invalid username checks and isolated backup/retention checks against temporary SQLite state.
 
 `tests/security/public-artifacts.test.mjs` exercises warning false positives, prohibited properties/associated identifiers, escaped keys, explicitly supplied synthetic values, all textual artifact surfaces plus downloads, report non-disclosure, opaque-file review/hash invalidation, links/queries/fragments and missing/placeholder links. On 2026-09-05, Node v24.20.0 directly executed this suite: six tests passed. This is synthetic utility evidence only; built site checks must run against the final integrated build. See SECURITY.md for optional restricted comparison and opaque artifact reviews.
@@ -37,4 +43,4 @@ The link checker reads built HTML `href`, `src`, and `action`; resolves static f
 | Operations | Actual HTTPS proxy rehearsal, database-outage static resilience, storage failures, tested consistent backup and isolated restore including deletion reconciliation, rollback and named monitoring owner |
 | Privacy | Notice reconciled to actual collection/storage/cookies/logs, approved retention/export/audit/backup policy, named sensitive-submission procedure operator |
 
-Browser, axe, responsive, keyboard, reduced-motion, 200% zoom, security-header and local performance checks have been executed with Playwright (14/14 passing) against the production build. The final Lighthouse lab run against the production build reports performance, accessibility, best-practices and SEO scores of 1.00, FCP/LCP 1.2s, TBT 0ms and CLS 0.005. Container/Caddy validation remains blocked by the unavailable Docker-compatible runtime (OPS-001). Restore rehearsal and production-device/field validation remain release work. Record later results with command, runtime/browser version, revision, date, result and material limits in the project evidence register. A build or unit-test pass alone does not satisfy any unexecuted release gate.
+Browser, axe, responsive, keyboard, reduced-motion, 200% zoom, security-header and local performance checks have been executed with Playwright (14/14 passing) against the production build. The current branding Lighthouse lab run against the production build reports accessibility, best-practices and SEO 1.00, performance 0.90, FCP 2.0s, LCP 3.5s, TBT 0ms and CLS 0.001; this is a local throttled lab result and needs field validation before any p75 claim. Container/Caddy validation remains blocked by the unavailable Docker-compatible runtime (OPS-001). Restore rehearsal and production-device/field validation remain release work. Record later results with command, runtime/browser version, revision, date, result and material limits in the project evidence register. A build or unit-test pass alone does not satisfy any unexecuted release gate.

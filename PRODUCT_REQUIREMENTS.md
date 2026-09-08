@@ -1129,32 +1129,22 @@ Logo rules:
 
 ### 24.4 Color system
 
-Initial brand token proposal:
+Approved KORA brand system (supersedes the initial proposal):
 
 | Token | Value | Intended use |
 |---|---:|---|
-| `kora-ink` | `#101111` | Primary dark background/text |
-| `kora-paper` | `#FAF9F5` | Primary light surface |
-| `kora-stone` | `#F1EFE8` | Secondary warm surface |
-| `kora-signal` | `#FF5A36` | Signature CTA/accent |
-| `kora-graphite` | `#252725` | Secondary dark text/surface |
-| `kora-mist` | `#D9DBD5` | Borders/subtle surfaces |
-| `kora-sage` | `#B9D8B0` | Controlled secondary accent |
+| `kora-deep-black` | `#070909` | Primary dark background and dark text |
+| `kora-premium-gold` | `#D4AF37` | Accent and filled controls with verified dark text |
+| `kora-off-white` | `#F2F2F2` | Primary light surface and reversed text |
+| `kora-graphite` | `#1C1C1D` | Secondary dark surface |
+| `kora-mist` | `#C9C9C7` | Borders and quiet surfaces |
 
-Rules:
-
-- `kora-signal` must not be used for small body text on `kora-paper` because the contrast is insufficient for normal text.
-- `kora-signal` may be used as a filled control with dark text when contrast passes.
-- Brand colors must not replace semantic error/success/warning colors.
-- All foreground/background combinations must be verified against the project's WCAG target before release.
-- Gradients may be used sparingly as spatial/atmospheric accents, not as the core logo.
+The visual balance is approximately 80–85% black, 10–15% off-white and 2–5% gold. Gold is an accent and must not be used as small normal text where contrast fails. Brand colors remain independent from semantic error, warning, success and focus colors. All foreground/background combinations must be verified against WCAG 2.2 AA before release. The supplied custom geometric KORA wordmark remains vector artwork and is never reconstructed as text.
 
 ### 24.5 Typography
 
-Preferred open-source direction:
-
-- Display: `Space Grotesk` or equivalent OFL-compatible geometric sans, served locally.
-- Body/UI: `Inter` or equivalent OFL-compatible highly readable sans, served locally.
+- Supporting website typeface: locally self-hosted `Manrope`, using only required licensed weights.
+- The KORA wordmark remains the supplied vector artwork; Manrope is not used to recreate it.
 
 Requirements:
 

@@ -8,3 +8,6 @@ playwright-report/
 test-results/
 coverage/
 *.sqlite*
+
+# Windows download metadata sidecars
+*:Zone.Identifier
