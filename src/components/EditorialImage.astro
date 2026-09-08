@@ -1,13 +1,13 @@
 ---
 import type { EditorialMedia } from '../content/media';
-interface Props { image: EditorialMedia; caption?: string; eager?: boolean; class?: string }
-const { image, caption, eager = false, class: className } = Astro.props;
+interface Props { image: EditorialMedia; caption?: string; eager?: boolean; sizes?: string; class?: string }
+const { image, caption, eager = false, sizes = '(max-width: 767px) calc(100vw - 40px), 50vw', class: className } = Astro.props;
 ---
 <figure class:list={['editorial-image', className]}>
   <picture>
-    <source srcset={image.avif} type="image/avif" />
-    <source srcset={image.webp} type="image/webp" />
-    <img src={image.fallback.src} alt={image.alt} width={image.width} height={image.height} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} sizes="(max-width: 767px) 100vw, 50vw" />
+    <source srcset={image.avif} sizes={sizes} type="image/avif" />
+    <source srcset={image.webp} sizes={sizes} type="image/webp" />
+    <img src={image.fallback.src} alt={image.alt} width={image.width} height={image.height} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} sizes={sizes} />
   </picture>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

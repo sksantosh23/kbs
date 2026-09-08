@@ -6,6 +6,7 @@ export default defineConfig({
   site: process.env.SITE_URL || 'https://kora.invalid',
   output: 'server',
   adapter: node({ mode: 'standalone' }),
+  build: { inlineStylesheets: 'always' },
   vite: { plugins: [tailwindcss()] },
   security: { checkOrigin: true },
 });
