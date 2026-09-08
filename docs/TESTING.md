@@ -44,3 +44,13 @@ The link checker reads built HTML `href`, `src`, and `action`; resolves static f
 | Privacy | Notice reconciled to actual collection/storage/cookies/logs, approved retention/export/audit/backup policy, named sensitive-submission procedure operator |
 
 Browser, axe, responsive, keyboard, reduced-motion, 200% zoom, security-header and local performance checks have been executed with Playwright (14/14 passing) against the production build. The current branding Lighthouse lab run against the production build reports accessibility, best-practices and SEO 1.00, performance 0.90, FCP 2.0s, LCP 3.5s, TBT 0ms and CLS 0.001; this is a local throttled lab result and needs field validation before any p75 claim. Container/Caddy validation remains blocked by the unavailable Docker-compatible runtime (OPS-001). Restore rehearsal and production-device/field validation remain release work. Record later results with command, runtime/browser version, revision, date, result and material limits in the project evidence register. The dependency audit was retried after registry access returned and reports 0 vulnerabilities (`npm audit --omit=dev --audit-level=high`, 2026-09-08). A build or unit-test pass alone does not satisfy any unexecuted release gate.
+
+Media verification:
+
+```sh
+npm run verify:media
+```
+
+This validates every manifest asset and derivative, confirms only approved free-standard providers are recorded, rejects public/runtime provider references and hotlinked image URLs, checks dimensions and filenames, and scans generated output for prohibited Government identifiers. Visual review must still inspect pixels, representation/endorsement risk, responsive crops, and mobile image weight.
+
+The media-enabled production build was verified on 2026-09-08 with 14/14 Playwright tests (axe, keyboard, reduced motion, 200% zoom, desktop/tablet/mobile reflow and security headers), a route image smoke check across all major media pages, and desktop/tablet/mobile homepage captures. Lighthouse on the local production build reported performance 0.89, accessibility 1.00, best practices 1.00, SEO 1.00, FCP 2.0s, LCP 3.6s, CLS 0.001 and 498 KiB total transfer. These are local lab measurements and do not establish field p75 metrics.

@@ -2,6 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { resolve, relative, extname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
+import { basename } from 'node:path';
 
 // Publication verification only: never scan visitor submissions or discover secrets.
 const field = '(?:uei(?:id|number)?|n?cage(?:code|number)?|naics(?:code|codes|number|numbers)?|sam(?:id|identifier|registration)?|governmentregistration(?:id|identifier)|registrationidentifier|classificationcode)';
@@ -9,6 +10,7 @@ const property = new RegExp(`(?:["'\\x60]${field}["'\\x60]\\s*:|\\b${field}\\s*[
 const associated = /\b(?:UEI|N?CAGE|NAICS|SAM(?:\s+(?:ID|identifier|registration))?)\b(?:\s|<[^>]*>|&nbsp;|[:=#"']){0,80}(?=[A-Z0-9-]{3,}\b)(?=[A-Z0-9-]*\d)[A-Z0-9-]{3,}\b/i;
 const textExtensions = new Set(['.html','.htm','.json','.jsonld','.js','.mjs','.cjs','.map','.svg','.xml','.txt','.csv','.css','.md','.webmanifest','.ics','.vcf']);
 const fontExtensions = new Set(['.woff','.woff2','.ttf','.otf']);
+const mediaExtensions = new Set(['.jpg','.jpeg','.png','.avif','.webp']);
 export const SYNTHETIC_SENTINEL = 'KORA_RESTRICTED_SYNTHETIC_7F92D1';
 
 export function normalizeText(text) {
@@ -43,6 +45,11 @@ export async function listFiles(root) {
 export async function verifyPublic(root, { restrictedValues = [], reviews = {} } = {}) {
   const files = await listFiles(root);
   const findings = [];
+  let approvedMediaNames = new Set();
+  try {
+    const manifest = JSON.parse(await readFile(resolve('content/media/media-manifest.json'), 'utf8'));
+    approvedMediaNames = new Set(manifest.assets.filter(asset => asset.approvalStatus === 'approved-for-release-1').map(asset => basename(asset.localPath).replace(/\.[^.]+$/, '')));
+  } catch { /* media verification reports manifest issues separately */ }
   if (!files.length) findings.push({ path: '.', rule: 'empty-public-output' });
   for (const file of files) {
     const path = relative(resolve(root), file).replaceAll('\\', '/');
@@ -50,7 +57,8 @@ export async function verifyPublic(root, { restrictedValues = [], reviews = {} }
     for (const rule of inspectText(bytes.toString('utf8'), restrictedValues)) findings.push({ path, rule });
     const extension = extname(path).toLowerCase();
     // Opaque documents/images require extraction AND rendered review, attested to exact bytes.
-    if (!textExtensions.has(extension) && !fontExtensions.has(extension)) {
+    const approvedMedia = mediaExtensions.has(extension) && [...approvedMediaNames].some(name => basename(path).startsWith(`${name}.`) || basename(path).startsWith(`${name}-`));
+    if (!textExtensions.has(extension) && !fontExtensions.has(extension) && !approvedMedia) {
       const hash = createHash('sha256').update(bytes).digest('hex');
       const review = reviews[path];
       if (!review || review.sha256 !== hash || !review.reviewer || !review.reviewedAt || review.textAndMetadataReviewed !== true || review.renderedReviewed !== true)

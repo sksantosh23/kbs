@@ -32,3 +32,7 @@ Manrope files in `public/fonts/` are from the Ubuntu `fonts-manrope` package, li
 ## Verification
 
 `npm run verify:brand` scans source, public assets, and (when present) generated client output for retired palette/font references, remote font URLs, and missing canonical assets. It runs as part of `npm run release:check`.
+
+## Editorial media layer
+
+Photography is supporting evidence, not the identity. Release 1 uses locally hosted, reviewed free-standard Pexels assets only. Canonical provenance is maintained in `content/media/media-manifest.json`; source-page and license URLs remain internal manifest data and are never requested by the site. `EditorialImage.astro` emits AVIF/WebP/JPEG sources with intrinsic dimensions, responsive sizes, useful neutral alt text, lazy loading below the fold, and no ownership or endorsement claims. `npm run verify:media` checks manifest completeness, local files, provider allowlist, dimensions, hotlink absence, public-path restrictions, and prohibited Government identifiers.
