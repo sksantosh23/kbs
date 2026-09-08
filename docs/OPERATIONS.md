@@ -1,6 +1,6 @@
 # Operations runbook
 
-This is a deployable topology and rehearsal procedure. Hosting, production rollout, staff provisioning, TLS issuance and a restore drill have not been performed by writing these files. See PROJECT_PLAN §§9/12 and PRD REL-001–005, §40.22–24.
+This is a deployable topology and rehearsal procedure. The approved production topology is Cloudflare Free → Kora-controlled DigitalOcean NYC3 Linux Droplet → Caddy → systemd → Astro/Node 24 → private SQLite. Production provisioning, DNS, TLS issuance, staff provisioning and restore rehearsal have not been performed by writing these files. Operational and backup/recovery contact is `support@korasb.com`; no credentials or account identifiers belong in this document. See PROJECT_PLAN §§9/12 and PRD REL-001–005, §40.22–24.
 
 ## Runtime and build
 
@@ -35,6 +35,10 @@ Caddy access logging is deliberately not enabled to avoid query/PII capture. Kee
 8. On rollback, stop writes and assess schema compatibility. Restore the matching verified snapshot only under the approved recovery decision; code rollback does not reverse migrations. Preserve any post-snapshot data as required by the approved recovery policy, without exposing it publicly. Repeat smoke and deletion checks before resuming service.
 
 ## Preproduction gates
+
+### Approved edge and host
+
+Q07 is closed as a topology decision. The execution sequence remains: provision the Kora-controlled DigitalOcean NYC3 Linux Droplet; configure Cloudflare Free DNS for `korasb.com`; issue and verify TLS; restrict the origin firewall to required administration and Cloudflare ingress; keep Node bound to `127.0.0.1:4321`; apply production filesystem ownership/permissions; configure encrypted off-host backups with separate key control; complete staging acceptance, security hardening and a mandatory restore rehearsal. The operational and recovery contact is `support@korasb.com`. None of these steps has been performed by this documentation update.
 
 Business owner approves exact capabilities/categories, Government source mapping attestations, medical/IoT copy, public claims and media rights; no actual registration identifier is needed in a public build. Privacy authority approves retention, audit/deletion/export/backup handling, incident responsibilities and notice wording. Hosting owner approves canonical domain, durable storage, encryption/key custody, TLS, budget, staff recovery and monitoring. Complete actual browser/device/accessibility/performance/security tests, dependency review, HTTP disclosure checks and restore drill. No release approval is inferred from a passing build.
 
