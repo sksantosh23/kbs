@@ -1,0 +1,24 @@
+[Unit]
+Description=Kora Business Solutions Astro/Node application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kora
+Group=kora
+WorkingDirectory=/srv/kora/app
+EnvironmentFile=-/etc/kora/kora.env
+Environment=HOST=127.0.0.1
+Environment=PORT=4321
+ExecStart=/usr/bin/node /srv/kora/app/dist/server/entry.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/data
+
+[Install]
+WantedBy=multi-user.target

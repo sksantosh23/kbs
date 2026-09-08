@@ -79,6 +79,19 @@ test('operational TypeScript CLIs provision, update, back up and safely gate ret
     assert.match(`${blockedRetention.stdout}\n${blockedRetention.stderr}`, /Retention policy is not approved/);
     const retention = await runScript('scripts/retention.ts', [], { ...env, KORA_RETENTION_APPROVED: '1' });
     assert.equal(retention.code, 0, retention.stderr);
+
+    const purgeDb = new DatabaseSync(database);
+    const oldId = 'old-inquiry';
+    purgeDb.prepare('INSERT INTO inquiries(id,public_reference,type,routing_queue,status,contact_name,email,organization,phone,subject,details,structured_data,created_at,updated_at,retention_until) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
+      .run(oldId, 'KORA-OLD', 'GENERAL', 'GENERAL', 'SPAM', 'Synthetic', 'synthetic@example.test', null, null, 'Synthetic retention test', 'Synthetic only', '{}', Date.now() - 40 * 24 * 60 * 60 * 1000, Date.now() - 40 * 24 * 60 * 60 * 1000, Date.now() + 24 * 30 * 24 * 60 * 60 * 1000);
+    purgeDb.prepare('INSERT INTO notes(id,inquiry_id,admin_id,note,created_at) VALUES(?,?,?,?,?)').run('old-note', oldId, first.id, 'Synthetic note', Date.now());
+    purgeDb.close();
+    const purged = await runScript('scripts/retention.ts', [], { ...env, KORA_RETENTION_APPROVED: '1', KORA_SPAM_RETENTION_DAYS: '30' });
+    assert.equal(purged.code, 0, purged.stderr);
+    const verifyPurge = new DatabaseSync(database);
+    assert.equal(verifyPurge.prepare('SELECT COUNT(*) AS count FROM inquiries WHERE id=?').get(oldId).count, 0);
+    assert.equal(verifyPurge.prepare('SELECT COUNT(*) AS count FROM notes WHERE id=?').get('old-note').count, 0);
+    verifyPurge.close();
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

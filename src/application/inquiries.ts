@@ -2,6 +2,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { deriveQueue, validateInquiry, canTransition, type Status } from '../domain/inquiry.ts';
 import { getDb } from '../server/database.ts';
 import { consumeRateLimit } from '../server/auth.ts';
+import { inquiryRetentionMs } from '../server/config.ts';
 export function hashPayload(input: Record<string,unknown>) { return createHash('sha256').update(JSON.stringify(input, Object.keys(input).sort())).digest('hex'); }
 export function submitInquiry(input: Record<string,unknown>, attemptToken: string, browserHash = 'anonymous') {
   const result=validateInquiry(input); if(!result.ok) return {ok:false as const, errors:result.errors};
@@ -16,7 +17,7 @@ export function submitInquiry(input: Record<string,unknown>, attemptToken: strin
     db.prepare('INSERT OR IGNORE INTO attempts(token_hash,browser_hash,created_at,expires_at,payload_hash) VALUES(?,?,?,?,?)').run(tokenHash,browserHash,now,now+48*60*60*1000,payloadHash);
     const attempt=db.prepare('SELECT inquiry_id,payload_hash,retired FROM attempts WHERE token_hash=?').get(tokenHash) as any;
     if(attempt?.inquiry_id) { const row=db.prepare('SELECT public_reference FROM inquiries WHERE id=?').get(attempt.inquiry_id) as any; db.exec('COMMIT'); return row ? {ok:true as const,publicReference:row.public_reference,duplicate:true} : {ok:false as const,errors:{form:'This submission has expired. Start again.'}}; }
-    db.prepare('INSERT INTO inquiries(id,public_reference,type,routing_queue,status,contact_name,email,organization,phone,subject,details,structured_data,created_at,updated_at,retention_until) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').run(id,reference,result.value.type,queue,'NEW',result.value.contact_name,result.value.email,result.value.organization||null,result.value.phone||null,result.value.subject,result.value.details,JSON.stringify(result.value.structured_data),now,now,now+24*30*24*60*60*1000);
+    db.prepare('INSERT INTO inquiries(id,public_reference,type,routing_queue,status,contact_name,email,organization,phone,subject,details,structured_data,created_at,updated_at,retention_until) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').run(id,reference,result.value.type,queue,'NEW',result.value.contact_name,result.value.email,result.value.organization||null,result.value.phone||null,result.value.subject,result.value.details,JSON.stringify(result.value.structured_data),now,now,inquiryRetentionMs(now));
     db.prepare('UPDATE attempts SET inquiry_id=? WHERE token_hash=?').run(id,tokenHash); db.exec('COMMIT'); return {ok:true as const,publicReference:reference,duplicate:false};
   } catch(error) { try{db.exec('ROLLBACK')}catch{}; throw error; }
 }
